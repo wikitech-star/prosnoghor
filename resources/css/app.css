@@ -1,0 +1,124 @@
+/* fonts */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Noto+Sans+Bengali:wght@100..900&family=Noto+Serif+Bengali:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Tiro+Bangla:ital@0;1&display=swap");
+
+@import "tailwindcss";
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.jsx";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+
+@plugin "daisyui" {
+    themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(98% 0 0);
+    --color-base-300: oklch(95% 0 0);
+    --color-base-content: oklch(21% 0.006 285.885);
+    --color-primary: oklch(0.8401 0.1475 80.45);
+    --color-primary-content: oklch(93% 0.034 272.788);
+    --color-secondary: oklch(0.7194 0.1794 54.4);
+    --color-secondary-content: oklch(94% 0.028 342.258);
+    --color-accent: oklch(77% 0.152 181.912);
+    --color-accent-content: oklch(38% 0.063 188.416);
+    --color-neutral: oklch(0.2665 0.0843 265.2);
+    --color-neutral-content: oklch(92% 0.004 286.32);
+    --color-info: oklch(74% 0.16 232.661);
+    --color-info-content: oklch(29% 0.066 243.157);
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(37% 0.077 168.94);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(41% 0.112 45.904);
+    --color-error: oklch(0.5676 0.2084 27.06);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 0rem;
+    --radius-field: 0rem;
+    --radius-box: 0rem;
+    --size-selector: 0.1875rem;
+    --size-field: 0.28125rem;
+    --border: 0.5px;
+    --depth: 0;
+    --noise: 0;
+}
+
+@theme {
+    --font-noto_serif: "Noto Serif Bengali", serif;
+    --font-noto_sans: "Noto Sans Bengali", sans-serif;
+    --font-baloo: "Baloo Da 2", sans-serif;
+    --font-tiro: "Tiro Bangla", serif;
+    --font-roboto: "Roboto", sans-serif;
+    --font-base: "Roboto", "Noto Serif Bengali", sans-serif;
+}
+
+@layer utilities {
+    .input,
+    .select,
+    .file-input,
+    .textarea {
+        @apply outline-0 focus:outline-0 focus:border-primary duration-300 w-full;
+    }
+
+    /* button */
+    .btn-error,
+    .btn-info {
+        @apply text-white;
+    }
+    .btn-dark {
+        @apply bg-neutral text-white;
+    }
+    .btn-primary {
+        @apply text-neutral;
+    }
+}
+
+@layer components {
+    .container {
+        @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    .flex-center {
+        @apply flex items-center justify-center;
+    }
+    .flex-between {
+        @apply flex items-center justify-between;
+    }
+}
+
+@layer base {
+    body,
+    html {
+        @apply font-base selection:bg-primary selection:text-white text-neutral;
+    }
+    .katex {
+        @apply font-sans;
+    }
+}
+.katex {
+    font-size: 13px !important;
+}
+
+/* edito */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-in-out;
+}
+.ql-editor {
+    padding: 0px !important;
+    overflow: hidden !important;
+}
