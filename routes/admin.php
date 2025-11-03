@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\Coupon\CouponController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\InstituteRequestController;
 use App\Http\Controllers\Backend\Package\PackageController;
+use App\Http\Controllers\Backend\Payment\PaymentController;
 use App\Http\Controllers\Backend\Question\QuestionController;
 use App\Http\Controllers\Backend\School\GroupClassController;
 use App\Http\Controllers\Backend\School\LassionController;
@@ -82,6 +83,14 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
         Route::get('/cupon-del/{id}', 'delete')->name('ux.cupon.del');
 
         Route::post('/get-cupon', 'getCupon')->name('ux.cupon.get');
+    });
+
+    // payment
+    Route::controller(PaymentController::class)->group(function(){
+        Route::get('/payment-list', 'index')->name('ux.payment.index');
+        Route::get('/payment-list/{id}', 'delete')->name('ux.payment.del');
+        Route::get('/payment-list/cancel/{id}', 'cancel')->name('ux.payment.cancel');
+        Route::get('/payment-list/accept/{id}', 'accept')->name('ux.payment.accept');
     });
 
     // setting routes

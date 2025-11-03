@@ -6,6 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentSession extends Model
 {
+
+    // filtter
+    public function scopeFilter($query, $filters)
+    {
+        if (isset($filters['search']) && is_string($filters['search']) && $filters['search']) {
+            $query->where('uid', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('method', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('amount', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('status', $filters['search'])
+                ->orWhere('phone', $filters['search'])
+                ->orWhere('tex', $filters['search']);
+        }
+    }
+
     protected $fillable = [
         'user_id',
         'uid',

@@ -110,9 +110,10 @@ class PriceController extends Controller
             $p->method = $request->getway;
             $p->amount = $finalPrice;
             $p->data = json_encode([
-                'paclage' => [
+                'package' => [
                     'cls' => $package->classes,
                     'suj' => $package->subjects,
+                    'days' => $package->days
                 ]
             ]);
             $p->save();
