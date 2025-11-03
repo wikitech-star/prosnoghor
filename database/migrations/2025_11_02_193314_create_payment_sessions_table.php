@@ -20,8 +20,12 @@ return new class extends Migration
             $table->string('uid')->unique();
             $table->enum('method', ['bkash', 'nagod', 'upay', 'rocket']);
             $table->decimal('amount', 12, 2);
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['unpaid', 'pending', 'approved', 'rejected'])->default('unpaid');
             $table->json('data')->nullable();
+
+            $table->string('phone')->nullable();
+            $table->string('tex')->nullable();
+
             $table->text('admin_note')->nullable();
             $table->timestamps();
         });

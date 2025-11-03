@@ -26,6 +26,8 @@ Route::controller(PaymentGetWayController::class)->middleware(['auth', 'hasNoRol
     Route::get('/payment/{id}', 'index')->name('g.payment.index');
     Route::get('/payment/cancel/{id}', 'cancel_payment')->name('g.payment.cancel');
     Route::get('/payment/predone/{id}', 'predone_view')->name('g.payment.predone');
+    Route::get('/payment/done/{id}', 'payemntDoneVIew')->name('g.payment.done');
+    Route::post('/payment/done/post', 'paymentDone')->name('g.payment.done.post');
 });
 
 // single routes

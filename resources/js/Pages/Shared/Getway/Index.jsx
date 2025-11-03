@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NoneLayout from "../../../Components/Layouts/NoneLayout";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 
 function Index({ data }) {
     const { appName } = usePage().props;
@@ -17,6 +17,17 @@ function Index({ data }) {
             setGetway("উপায়");
         }
     }, []);
+
+    // done
+    const doneForm = useForm({
+        id: data?.uid,
+        phone: "",
+        trx: "",
+    });
+    const handleForm = (e) => {
+        e.preventDefault();
+        doneForm.post(route("g.payment.done.post"));
+    };
     return (
         <div class="safearea justify-center">
             <div class="w-full md:w-[300px]">
@@ -79,15 +90,37 @@ function Index({ data }) {
                     <div className="mt-5 w-full space-y-2">
                         <input
                             type="tel"
+                            value={doneForm.data.phone}
+                            onChange={(e) =>
+                                doneForm.setData("phone", e.target.value)
+                            }
                             className="input input-sm w-full"
                             placeholder="একাউন্ট নাম্বার"
                         />
+                        {doneForm.errors.phone && (
+                            <p className="text-sm text-error">
+                                {doneForm.errors.phone}
+                            </p>
+                        )}
                         <input
                             type="text"
+                            value={doneForm.data.trx}
+                            onChange={(e) =>
+                                doneForm.setData("trx", e.target.value)
+                            }
                             className="input input-sm w-full"
                             placeholder="TRX নাম্বার"
                         />
-                        <button className="btn btn-sm btn-primary w-full">
+                        {doneForm.errors.trx && (
+                            <p className="text-sm text-error">
+                                {doneForm.errors.trx}
+                            </p>
+                        )}
+                        <button
+                            onClick={handleForm}
+                            disabled={doneForm.processing}
+                            className="btn btn-sm btn-primary w-full"
+                        >
                             সম্পন্ন করুন
                         </button>
                         <Link
