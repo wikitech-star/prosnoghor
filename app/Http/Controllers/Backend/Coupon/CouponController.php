@@ -93,4 +93,38 @@ class CouponController extends Controller
             return redirect()->back()->with('error', 'সার্ভার সমাস্যা আবার চেষ্টা করুন.' . env('APP_ENV') == 'local' ?? $th->getMessage());
         }
     }
+
+    // getCupon
+    public function getCupon(Request $request)
+    {
+        try {
+            $coupon = Coupon::where('code', $request->code)->first();
+            if (!$coupon) {
+                return response()->json(['error' => 'কুপন পাওয়া যায়নি!'], 404);
+            }
+
+            if (!empty($coupon->target)) {
+                if ((int) $coupon->target !== (int) $request->package) {
+                    return response()->json([
+                        'error' => 'এই কুপনটি নির্দিষ্ট প্যাকেজের জন্য প্রযোজ্য নয়!'
+                    ], 400);
+                }
+            }
+
+            if ($coupon->total_usages >= $coupon->usages) {
+                return response()->json([
+                    'error' => 'এই কুপনটির ব্যাবহার পরিমান শেষ।'
+                ], 400);
+            }
+
+            return response()->json($coupon);
+        } catch (\Exception $th) {
+            $msg = 'সার্ভার ত্রুটি! আবার চেষ্টা করুন।';
+            if (env('APP_ENV') === 'local') {
+                $msg .= ' (' . $th->getMessage() . ')';
+            }
+
+            return response()->json(['error' => $msg], 500);
+        }
+    }
 }

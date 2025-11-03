@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Ui;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
+use App\Models\PaymentSession;
 use App\Models\Pckage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PriceController extends Controller
@@ -61,5 +64,68 @@ class PriceController extends Controller
         return Inertia::render('Ui/PriceCheckout', [
             'data' => $newJson
         ]);
+    }
+
+    // create payment
+    public function createPyament(Request $request)
+    {
+        try {
+            if (empty($request->id)) {
+                return redirect()->back()->with('error', 'কিছু একটা সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+            }
+            if (empty($request->getway)) {
+                return redirect()->back()->with('error', 'পেমেন্ট সিস্টেম বাছায় করুন');
+            }
+
+            $package = Pckage::find($request->id);
+            if (!$package) {
+                return redirect()->back()->with('error', 'প্যাকেজ পাওয়া যায়নি।');
+            }
+
+            // মূল দাম
+            $originalPrice = $package->selling_price;
+            $finalPrice = $originalPrice;
+            if ($request->cupon) {
+                $coupon = Coupon::where('code', $request->cupon)->first();
+                if (!$coupon) {
+                    return redirect()->back()->with('error', 'কুপন কোড সঠিক নয়।');
+                }
+                // ডিসকাউন্ট হিসাব
+                if ($coupon->type === 'p') {
+                    // percentage discount
+                    $finalPrice = $originalPrice - ($originalPrice * $coupon->value) / 100;
+                } elseif ($coupon->type === 't') {
+                    // fixed discount
+                    $finalPrice = $originalPrice - $coupon->value;
+                }
+
+                // Negative দাম প্রতিরোধ
+                if ($finalPrice < 0) {
+                    $finalPrice = 0;
+                }
+            }
+
+            $p = new PaymentSession();
+            $p->user_id = Auth::id();
+            $p->method = $request->getway;
+            $p->amount = $finalPrice;
+            $p->data = json_encode([
+                'paclage' => [
+                    'cls' => $package->classes,
+                    'suj' => $package->subjects,
+                ]
+            ]);
+            $p->save();
+
+            if ($request->cupon) {
+                $coupon = Coupon::where('code', $request->cupon)->first();
+                $coupon->total_usages = ($coupon->total_usages + 1);
+                $coupon->save();
+            }
+
+            return redirect()->route('g.payment.index', ['id' => $p->uid]);
+        } catch (\Exception $th) {
+            return redirect()->back()->with('error', 'সার্ভার সমাস্যা আবার চেষ্টা করুন.' . env('APP_ENV') == 'local' ?? $th->getMessage());
+        }
     }
 }

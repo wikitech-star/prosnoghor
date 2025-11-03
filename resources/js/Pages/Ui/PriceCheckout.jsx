@@ -1,11 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import GuestLayout from "../../Components/Layouts/GuestLayout";
 import Input from "../../Components/Parts/Input";
 import { DAYS_TO_BANGLA_DURATION, ENGLISH_TO_BANGLA } from "../../Utils/Helper";
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function PriceCheckout({ data }) {
-    const { auth } = usePage().props;
+    const pForm = useForm({
+        id: data?.package_id,
+        cupon: "",
+        getway: "",
+    });
+
+    const handlePayment = (e) => {
+        e.preventDefault();
+        pForm.post(route("price.package.payment"), {
+            preserveScroll: true,
+            preserveState: true,
+        });
+    };
+
+    // cupon
+    const [cupon, setCupon] = useState("");
+    const [DiscountedPrice, setDiscountedPrice] = useState(
+        data?.selling_price || 0
+    );
+    const handleCuponCode = () => {
+        axios
+            .post(route("ux.cupon.get"), {
+                code: cupon,
+                package: data?.package_id,
+            })
+            .then((res) => {
+                const coupon = res.data;
+
+                // ধরো তোমার মূল দাম
+                const originalPrice = data?.selling_price;
+
+                let finalPrice = originalPrice;
+
+                // ডিসকাউন্ট হিসাব
+                if (coupon.type === "p") {
+                    // percentage
+                    finalPrice =
+                        originalPrice - (originalPrice * coupon.value) / 100;
+                } else if (coupon.type === "t") {
+                    // fixed amount
+                    finalPrice = originalPrice - coupon.value;
+                }
+
+                // negative না হওয়ার জন্য
+                if (finalPrice < 0) finalPrice = 0;
+
+                // এখন state এ রাখতে পারো
+                setDiscountedPrice(finalPrice);
+                toast.success("কুপন প্রয়োগ সফল হয়েছে।");
+                pForm.setData("cupon", coupon.code);
+            })
+            .catch((error) => {
+                toast.error(error.response?.data?.error || error.message);
+            });
+    };
     return (
         <div className="pb-5">
             <div className="bg-white shadow-[0_0_100px_rgba(0,0,0,0.03)]  mt-10 border border-primary/30 rounded-box max-w-xl mx-auto">
@@ -82,41 +138,107 @@ function PriceCheckout({ data }) {
                             </div>
                             <div className="flex items-center justify-between text-sm font-normal text-neutral">
                                 <p>ডিসকাউন্টঃ-</p>
-                                <p>{ENGLISH_TO_BANGLA(0)} টাকা</p>
+                                <p>
+                                    {ENGLISH_TO_BANGLA(
+                                        DiscountedPrice
+                                            ? Number(
+                                                  data?.selling_price -
+                                                      DiscountedPrice
+                                              ).toFixed(2)
+                                            : data?.selling_price
+                                    )}{" "}
+                                    টাকা
+                                </p>
                             </div>
                             <hr className="border my-2 border-dashed border-neutral" />
                             <div className="flex items-center justify-between text-sm font-bold text-neutral">
                                 <p>সর্বমোট মূল্যঃ-</p>
-                                <p>{ENGLISH_TO_BANGLA(0)} টাকা</p>
+                                <p>{ENGLISH_TO_BANGLA(DiscountedPrice)} টাকা</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="px-9 py-5 space-y-3 border-t border-dashed border-gray-300">
-                    <Input label="নাম*" value={auth?.name} type="text" />
-                    <Input label="ইমেইল*" value={auth?.email} type="email" />
-                    <Input label="ফোন*" value={auth?.phone} type="tel" />
-
                     <div className="flex items-center justify-between gap-3">
                         <Input
                             type="text"
+                            value={cupon}
+                            onChange={(e) => setCupon(e.target.value)}
                             className="w-full"
                             placeholder="কুপন কোড"
                         />
-                        <button className="btn btn-info">প্রয়োগ করুন</button>
+                        <button
+                            onClick={handleCuponCode}
+                            disabled={cupon == ""}
+                            className="btn btn-info"
+                        >
+                            প্রয়োগ করুন
+                        </button>
                     </div>
 
                     {/* get way */}
-                    <div className="gri grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                        <Link
-                            href={route("g.payment.index", { type: "bkash" })}
-                        ></Link>
+                    <div className="grid grid-cols-2 gap-3">
+                        <button
+                            onClick={() => pForm.setData("getway", "bkash")}
+                            className={`w-full duration-300 ${
+                                pForm.data.getway == "bkash"
+                                    ? "border-primary"
+                                    : "bg-gray-100"
+                            } hover:border-primary border-2  border-dashed border-gray-300 min-h-[60px] px-6 text-lg font-medium flex justify-center gap-3 items-center`}
+                        >
+                            <img
+                                src="/static/bkash.png"
+                                className="w-auto h-7 object-fill"
+                            />
+                        </button>
+                        <button
+                            onClick={() => pForm.setData("getway", "nagod")}
+                            className={`w-full duration-300 ${
+                                pForm.data.getway == "nagod"
+                                    ? "border-primary"
+                                    : "bg-gray-100"
+                            } hover:border-primary border-2  border-dashed border-gray-300 min-h-[60px] px-6 text-lg font-medium flex justify-center gap-3 items-center`}
+                        >
+                            <img
+                                src="/static/nagod.png"
+                                className="w-auto h-5 object-fill"
+                            />
+                        </button>
+                        <button
+                            onClick={() => pForm.setData("getway", "upay")}
+                            className={`w-full duration-300 ${
+                                pForm.data.getway == "upay"
+                                    ? "border-primary"
+                                    : "bg-gray-100"
+                            } hover:border-primary border-2  border-dashed border-gray-300 min-h-[60px] px-6 text-lg font-medium flex justify-center gap-3 items-center`}
+                        >
+                            <img
+                                src="/static/upay.png"
+                                className="w-auto h-6 object-fill"
+                            />
+                        </button>
+                        <button
+                            onClick={() => pForm.setData("getway", "rocket")}
+                            className={`w-full duration-300 ${
+                                pForm.data.getway == "rocket"
+                                    ? "border-primary"
+                                    : "bg-gray-100"
+                            } hover:border-primary border-2  border-dashed border-gray-300 min-h-[60px] px-6 text-lg font-medium flex justify-center gap-3 items-center`}
+                        >
+                            <img
+                                src="/static/rocket.png"
+                                className="w-auto h-6 object-fill"
+                            />
+                        </button>
                     </div>
 
-                    <button className="btn btn-primary w-full">
-                        পেমেন্ট করুন {ENGLISH_TO_BANGLA(data?.selling_price)}{" "}
-                        টাকা
+                    <button
+                        onClick={handlePayment}
+                        disabled={pForm.processing}
+                        className="btn btn-primary w-full"
+                    >
+                        পেমেন্ট করুন {ENGLISH_TO_BANGLA(DiscountedPrice)} টাকা
                     </button>
                 </div>
 

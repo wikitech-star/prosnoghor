@@ -80,6 +80,8 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
         Route::get('/cupon-add', 'add_view')->name('ux.cupon.add');
         Route::post('/cupon-add', 'store')->name('ux.cupon.post');
         Route::get('/cupon-del/{id}', 'delete')->name('ux.cupon.del');
+
+        Route::post('/get-cupon', 'getCupon')->name('ux.cupon.get');
     });
 
     // setting routes

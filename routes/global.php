@@ -19,15 +19,14 @@ Route::middleware(['auth', 'hasNoRole', 'role:teacher,admin'])->prefix('app')->g
         Route::post('/question-paper-update', 'updateQuestionPaper')->name('g.question.paper.update');
         Route::get('/questions-papper-details/{id}', 'show_paper_details')->name('g.questions.papper.details');
     });
-
-
-    // payment getway 
-    Route::controller(PaymentGetWayController::class)->group(function () {
-        Route::get('/payment', 'index')->name('g.payment.index');
-        Route::post('/payment-create', 'createPaymentSession')->name('g.payment.create');
-    });
 });
 
+// payment getway 
+Route::controller(PaymentGetWayController::class)->middleware(['auth', 'hasNoRole', 'role:teacher'])->group(function () {
+    Route::get('/payment/{id}', 'index')->name('g.payment.index');
+    Route::get('/payment/cancel/{id}', 'cancel_payment')->name('g.payment.cancel');
+    Route::get('/payment/predone/{id}', 'predone_view')->name('g.payment.predone');
+});
 
 // single routes
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
