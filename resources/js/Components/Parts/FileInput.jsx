@@ -1,4 +1,4 @@
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Trash } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 export default function FileInput({
@@ -12,7 +12,6 @@ export default function FileInput({
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
 
-    // show old file preview if exists
     useEffect(() => {
         if (old && !file) {
             setPreview(old);
@@ -36,47 +35,66 @@ export default function FileInput({
         }
     };
 
-    return (
-        <>
-            <label
-                htmlFor={name}
-                className={`flex items-center justify-center w-full border-2 min-h-[150px] border-dashed border-gray-300 p-5 rounded-box duration-300 hover:border-primary ${className}`}
-            >
-                <input
-                    type="file"
-                    name={name}
-                    id={name}
-                    onChange={handleFileChange}
-                    className="hidden"
-                    accept={accept}
-                />
+    const handleRemove = () => {
+        setFile(null);
+        setPreview(null);
+        if (onChange) onChange(null);
+    };
 
+    return (
+        <div className={`relative ${className}`}>
+            <input
+                type="file"
+                name={name}
+                id={name}
+                onChange={handleFileChange}
+                accept={accept}
+                className="hidden"
+            />
+
+            <div
+                onClick={() => document.getElementById(name).click()}
+                className={`flex items-center justify-center w-full border-2 min-h-[150px] border-dashed border-gray-300 p-5 rounded-box duration-300 hover:border-primary cursor-pointer`}
+            >
                 {preview ? (
-                    <div>
-                        {preview.startsWith("blob:") ||
-                        preview.startsWith("data:") ||
-                        preview.match(/\.(jpeg|jpg|png|gif|webp)$/i) ? (
-                            <img
-                                src={preview}
-                                alt="Preview"
-                                className="max-h-40 rounded-box"
-                            />
-                        ) : (
-                            <p className="text-sm text-gray-600">
-                                {file
-                                    ? `Selected file: ${file.name}`
-                                    : `Existing file: ${old}`}
-                            </p>
-                        )}
-                    </div>
+                    <>
+                        <div>
+                            {preview.startsWith("blob:") ||
+                            preview.startsWith("data:") ||
+                            preview.match(/\.(jpeg|jpg|png|gif|webp)$/i) ? (
+                                <img
+                                    src={preview}
+                                    alt="Preview"
+                                    className="max-h-40 rounded-box"
+                                />
+                            ) : (
+                                <p className="text-sm text-gray-600">
+                                    {file
+                                        ? `Selected file: ${file.name}`
+                                        : `Existing file: ${old}`}
+                                </p>
+                            )}
+                        </div>
+                    </>
                 ) : (
                     <div className="flex flex-col items-center gap-2 text-gray-500">
                         <PlusCircle size={20} className="text-gray-400" />
                         <p>আপনার ফাইল আপলোড করুন</p>
                     </div>
                 )}
-            </label>
+            </div>
+
+            {preview && (
+                <button
+                    type="button"
+                    onClick={handleRemove}
+                    className="btn btn-sm btn-circle btn-error absolute right-4 top-4 z-50"
+                >
+                    <Trash size={14} />
+                </button>
+            )}
+
             {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
-        </>
+        </div>
     );
 }

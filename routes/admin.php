@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\School\GroupClassController;
 use App\Http\Controllers\Backend\School\LassionController;
 use App\Http\Controllers\Backend\School\QuestionTypeController;
 use App\Http\Controllers\Backend\School\SubjectsController;
+use App\Http\Controllers\Backend\Seed\SeedController;
 use App\Http\Controllers\Backend\Setting\GoogleAuthController;
 use App\Http\Controllers\Backend\Setting\MailSettingController;
 use App\Http\Controllers\Backend\Setting\SiteSettingController;
@@ -100,6 +101,14 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
         Route::get('/contact-lits', 'index')->name('ux.contact.index');
         Route::get('/contact-del/{id}', 'delete')->name('ux.contact.del');
         Route::get('/contact-view/{id}', 'details')->name('ux.contact.view');
+    });
+
+    // seed
+    Route::controller(SeedController::class)->group(function () {
+        Route::get('/seed-list', 'index')->name('ux.seed.index');
+        Route::get('/seed-add', 'add_view')->name('ux.seed.add');
+        Route::post('/seed-add', 'store')->name('ux.seed.post');
+        Route::get('/seed-del/{id}', 'delete')->name('ux.seed.del');
     });
 
     // setting routes

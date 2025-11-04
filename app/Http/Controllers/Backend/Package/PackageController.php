@@ -86,7 +86,7 @@ class PackageController extends Controller
         ]);
 
         try {
-            if ($request->price &&  (int)$request->price > (int)$request->selling_price) {
+            if ($request->price &&  (int)$request->price < (int)$request->selling_price) {
                 return redirect()->back()->with('error', 'মূল্য থেকে বিক্রয়মূল্য বেশি হতে পারবে না।');
             }
 
