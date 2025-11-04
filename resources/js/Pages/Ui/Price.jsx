@@ -49,7 +49,7 @@ function Price({ data }) {
                                         </span>
                                     </h1>
 
-                                    {val?.price && (
+                                    {Number(val?.price) ? (
                                         <span className="bg-primary rounded-box text-xs font-semibold text-neutral absolute right-0 top-0 px-3 py-0.5">
                                             সেভ{" "}
                                             {ENGLISH_TO_BANGLA(
@@ -62,7 +62,7 @@ function Price({ data }) {
                                             )}
                                             %
                                         </span>
-                                    )}
+                                    ) : null}
 
                                     <Link
                                         href={route("price.details", {

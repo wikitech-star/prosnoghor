@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\Contact\ContactController;
 use App\Http\Controllers\Backend\Coupon\CouponController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\InstituteRequestController;
@@ -86,12 +87,19 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
     });
 
     // payment
-    Route::controller(PaymentController::class)->group(function(){
+    Route::controller(PaymentController::class)->group(function () {
         Route::get('/payment-list', 'index')->name('ux.payment.index');
         Route::get('/payment-history', 'history_view')->name('ux.payment.history');
         Route::get('/payment-list/{id}', 'delete')->name('ux.payment.del');
         Route::get('/payment-list/cancel/{id}', 'cancel')->name('ux.payment.cancel');
         Route::get('/payment-list/accept/{id}', 'accept')->name('ux.payment.accept');
+    });
+
+    // contact
+    Route::controller(ContactController::class)->group(function () {
+        Route::get('/contact-lits', 'index')->name('ux.contact.index');
+        Route::get('/contact-del/{id}', 'delete')->name('ux.contact.del');
+        Route::get('/contact-view/{id}', 'details')->name('ux.contact.view');
     });
 
     // setting routes

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Teacher\ContactController;
 use App\Http\Controllers\Teacher\DashboardController;
 use App\Http\Controllers\Teacher\InstituteController;
 use App\Http\Controllers\Teacher\TransactionsController;
@@ -19,4 +20,7 @@ Route::middleware(['auth', 'hasNoRole', 'role:teacher'])->group(function () {
     Route::controller(TransactionsController::class)->group(function () {
         Route::get('/transactions', 'index')->name('tech.transactions.list');
     });
+
+    // concat
+    Route::get('/concat', [ContactController::class, 'index'])->name('tech.contact.index');
 });

@@ -86,8 +86,8 @@ class PackageController extends Controller
         ]);
 
         try {
-            if ($request->price &&  (int)$request->price <= (int)$request->selling_price) {
-                return redirect()->back()->with('price', 'মূল্য অবশ্যই বিক্রয়মূল্যের চেয়ে বেশি হতে হবে।');
+            if ($request->price &&  (int)$request->price > (int)$request->selling_price) {
+                return redirect()->back()->with('error', 'মূল্য থেকে বিক্রয়মূল্য বেশি হতে পারবে না।');
             }
 
             $q = $request->id ? Pckage::find($request->id) : new Pckage();
