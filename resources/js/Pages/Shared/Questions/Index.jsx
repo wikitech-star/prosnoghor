@@ -9,8 +9,39 @@ import { ArrowRight, Expand, Lock, Ribbon } from "lucide-react";
 
 export default function Index({ group_class, subjects, lassion, subscriprs }) {
     // subcribe
-    const [subsClasses, setSubsClasses] = useState(subscriprs?.class);
-    const [subsSubjects, setSubsSubjects] = useState(subscriprs?.sub);
+    const [subsClasses, setSubsClasses] = useState([]);
+    const [subsSubjects, setSubsSubjects] = useState([]);
+
+    const [planeMode, setPlanMode] = useState(false);
+    useEffect(() => {
+        if (subscriprs?.class && subscriprs?.sub) {
+            setSubsClasses(subscriprs.class);
+            setSubsSubjects(subscriprs.sub);
+            setPlanMode(true);
+        } else if (group_class && subjects?.length > 0) {
+            // STEP 1: Random class নির্বাচন
+            const classKeys = Object.keys(group_class);
+            const randomClassKey =
+                classKeys[Math.floor(Math.random() * classKeys.length)];
+            setSubsClasses([Number(randomClassKey)]);
+
+            // STEP 2: ওই class_id অনুযায়ী subject ফিল্টার করা
+            const filteredSubjects = subjects.filter(
+                (sub) => Number(sub.class_id) === Number(randomClassKey)
+            );
+
+            // STEP 3: ওই class-এর subject থেকে random একটা select করা
+            if (filteredSubjects.length > 0) {
+                const randomSubject =
+                    filteredSubjects[
+                        Math.floor(Math.random() * filteredSubjects.length)
+                    ];
+                setSubsSubjects([randomSubject.id]);
+            }
+        } else {
+            router.get(route("price.list"));
+        }
+    }, [subscriprs, group_class, subjects]);
 
     // class id
     const [classJson, setClassJson] = useState({});
@@ -76,6 +107,12 @@ export default function Index({ group_class, subjects, lassion, subscriprs }) {
                     >
                         <Ribbon size={14} /> সাবস্ক্রাইব কিনুন
                     </Link>
+                    {!planeMode && (
+                        <p className="text-center text-sm max-w-sm mx-auto mt-3 text-neutral">
+                            আপনার কোনো প্যাকেজ নেই। একটি প্যাকেজ নির্বাচন করুন
+                            এবং আপনার প্রশ্ন তৈরি করুন।
+                        </p>
+                    )}
                 </div>
 
                 {/* body */}

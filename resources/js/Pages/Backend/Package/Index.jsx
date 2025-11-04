@@ -74,8 +74,8 @@ export default function Index({ data, filters }) {
                                 <th></th>
                                 <th>নাম</th>
                                 <th>মুল্য</th>
-                                <th>সময়</th>
                                 <th>বিক্রয় মূল্য</th>
+                                <th>সময়</th>
                                 <th>তৈরি করেছেন</th>
                                 <th>সর্বশেষ পরিবর্তন</th>
                                 <th>কার্যক্রম</th>
@@ -91,11 +91,11 @@ export default function Index({ data, filters }) {
                                         {ENGLISH_TO_BANGLA(item.price) || "N/A"}
                                     </td>
                                     <td>
-                                        {DAYS_TO_BANGLA_DURATION(item.days) || "N/A"}
-                                    </td>
-                                    <td>
                                         ৳{" "}
                                         {ENGLISH_TO_BANGLA(item.selling_price)}
+                                    </td>
+                                    <td>
+                                        {DAYS_TO_BANGLA_DURATION(item.days) || "N/A"}
                                     </td>
                                     <td>
                                         {ENGLISH_DATE_TO_BANGLA(

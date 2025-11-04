@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pckages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->decimal('price', 10, 2)->nullable();
+            $table->decimal('price', 10, 2)->default(0);
             $table->decimal('selling_price', 10, 2);
             $table->longText('details')->nullable();
             $table->json('classes')->nullable();

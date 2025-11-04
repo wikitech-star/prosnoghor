@@ -86,14 +86,16 @@ class PackageController extends Controller
         ]);
 
         try {
-            if ($request->price <= $request->selling_price) {
+            if ($request->price &&  (int)$request->price <= (int)$request->selling_price) {
                 return redirect()->back()->with('price', 'মূল্য অবশ্যই বিক্রয়মূল্যের চেয়ে বেশি হতে হবে।');
             }
 
             $q = $request->id ? Pckage::find($request->id) : new Pckage();
             $q->title = $request->title;
             $q->details = $request->details;
-            $q->price = $request->price;
+            if ($request->price) {
+                $q->price = $request->price;
+            }
             $q->selling_price = $request->selling_price;
             $q->classes = json_encode($request->class_id);
             $q->subjects = json_encode($request->subjects);
