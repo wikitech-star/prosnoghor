@@ -129,7 +129,7 @@ export default function Add({ update }) {
                         <small>ফিচার ইমেজ</small>
                         <FileInput
                             name="thumbnail"
-                            old={seedFrom.data.thumbnailOld}
+                            old={seedFrom.data.thumbnailOld ? '/uploads/'+seedFrom.data.thumbnailOld : ''}
                             error={seedFrom.errors.image}
                             accept="image/*"
                             onChange={(file) =>

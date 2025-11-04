@@ -11,8 +11,8 @@ const SITE_MENU = [
     },
     {
         name: "লেকচার শিট",
-        url: route("home"),
-        active: ["home"],
+        url: route("ui.seet.index"),
+        active: ["ui.seet.index"],
     },
     {
         name: "যোগাযোগ",

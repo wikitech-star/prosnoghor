@@ -3,6 +3,7 @@
 use App\Http\Controllers\Ui\ContactController;
 use App\Http\Controllers\Ui\HomeController;
 use App\Http\Controllers\Ui\PriceController;
+use App\Http\Controllers\Ui\SeedController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,4 +21,9 @@ Route::controller(PriceController::class)->group(function () {
 Route::controller(ContactController::class)->group(function () {
     Route::get('/contact-us', 'index')->name('ui.contact.index');
     Route::post('/contact-us', 'store')->name('ui.contact.post');
+});
+
+// seed
+Route::controller(SeedController::class)->group(function(){
+    Route::get('/seet-list', 'index')->name('ui.seet.index');
 });
