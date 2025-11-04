@@ -5,9 +5,28 @@ import Select from "../../../Components/Parts/Select";
 import Model from "../../../Components/Parts/Model";
 import { ENGLISH_TO_BANGLA } from "../../../Utils/Helper";
 import { Link, router, useForm } from "@inertiajs/react";
-import { ArrowRight, Expand, Ribbon } from "lucide-react";
+import { ArrowRight, Expand, Lock, Ribbon } from "lucide-react";
 
-export default function Index({ group_class, subjects, lassion }) {
+export default function Index({ group_class, subjects, lassion, subscriprs }) {
+    // subcribe
+    const [subsClasses, setSubsClasses] = useState(subscriprs?.class);
+    const [subsSubjects, setSubsSubjects] = useState(subscriprs?.sub);
+
+    // class id
+    const [classJson, setClassJson] = useState({});
+    useEffect(() => {
+        if (!group_class || !subsClasses) return;
+
+        const filtered = Object.entries(group_class)
+            .filter(([key]) => subsClasses.includes(Number(key)))
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+
+        setClassJson(filtered);
+    }, [group_class, subsClasses]);
+
     // create questionForm
     const qFrom = useForm({
         program_name: "",
@@ -51,7 +70,10 @@ export default function Index({ group_class, subjects, lassion }) {
                     <p className="text-neutral text-base">
                         আপনার ক্লাস আরও স্মার্ট হতে পারে!
                     </p>
-                    <Link href={route('price.list')} className="btn btn-sm btn-primary mt-4">
+                    <Link
+                        href={route("price.list")}
+                        className="btn btn-sm btn-primary mt-4"
+                    >
                         <Ribbon size={14} /> সাবস্ক্রাইব কিনুন
                     </Link>
                 </div>
@@ -70,7 +92,7 @@ export default function Index({ group_class, subjects, lassion }) {
                     />
                     <Select
                         label="শ্রেণি*"
-                        options={group_class}
+                        options={classJson}
                         oldVal={qFrom.data.class_id}
                         error={qFrom.errors.class_id}
                         onChange={(e) =>
@@ -164,7 +186,8 @@ export default function Index({ group_class, subjects, lassion }) {
                         subjects
                             .filter(
                                 (val) =>
-                                    val.class_id === Number(qFrom.data.class_id)
+                                    Number(val.class_id) ===
+                                    Number(qFrom.data.class_id)
                             )
                             .map((val, i) => (
                                 <label
@@ -172,33 +195,40 @@ export default function Index({ group_class, subjects, lassion }) {
                                     htmlFor={i}
                                     className="w-full px-3 py-1.5 border border-gray-200 rounded-box flex items-center gap-3 duration-300 hover:bg-gray-100"
                                 >
-                                    <input
-                                        type="checkbox"
-                                        id={i}
-                                        value={val.id}
-                                        checked={qFrom.data.subjects?.includes(
-                                            val.id
-                                        )}
-                                        onChange={(e) => {
-                                            const selectedSubjects =
-                                                qFrom.data.subjects || [];
+                                    {subsSubjects.includes(Number(val.id)) ? (
+                                        <input
+                                            type="checkbox"
+                                            id={i}
+                                            value={val.id}
+                                            checked={qFrom.data.subjects?.includes(
+                                                val.id
+                                            )}
+                                            onChange={(e) => {
+                                                const selectedSubjects =
+                                                    qFrom.data.subjects || [];
 
-                                            if (e.target.checked) {
-                                                qFrom.setData("subjects", [
-                                                    ...selectedSubjects,
-                                                    val.id,
-                                                ]);
-                                            } else {
-                                                qFrom.setData(
-                                                    "subjects",
-                                                    selectedSubjects.filter(
-                                                        (id) => id !== val.id
-                                                    )
-                                                );
-                                            }
-                                        }}
-                                        className="checkbox"
-                                    />
+                                                if (e.target.checked) {
+                                                    qFrom.setData("subjects", [
+                                                        ...selectedSubjects,
+                                                        val.id,
+                                                    ]);
+                                                } else {
+                                                    qFrom.setData(
+                                                        "subjects",
+                                                        selectedSubjects.filter(
+                                                            (id) =>
+                                                                id !== val.id
+                                                        )
+                                                    );
+                                                }
+                                            }}
+                                            className="checkbox"
+                                        />
+                                    ) : (
+                                        <div>
+                                            <Lock size={14} />
+                                        </div>
+                                    )}
                                     <span>{val?.name}</span>
                                 </label>
                             ))
@@ -235,10 +265,13 @@ export default function Index({ group_class, subjects, lassion }) {
                         lassion
                             .filter(
                                 (val) =>
-                                    val.class_id === Number(qFrom.data.class_id)
+                                    Number(val.class_id) ===
+                                    Number(qFrom.data.class_id)
                             )
                             .filter((val) =>
-                                qFrom.data.subjects?.includes(val.subject_id)
+                                qFrom.data.subjects?.includes(
+                                    Number(val.subject_id)
+                                )
                             )
                             .map((val, i) => (
                                 <label

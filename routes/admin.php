@@ -88,6 +88,7 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
     // payment
     Route::controller(PaymentController::class)->group(function(){
         Route::get('/payment-list', 'index')->name('ux.payment.index');
+        Route::get('/payment-history', 'history_view')->name('ux.payment.history');
         Route::get('/payment-list/{id}', 'delete')->name('ux.payment.del');
         Route::get('/payment-list/cancel/{id}', 'cancel')->name('ux.payment.cancel');
         Route::get('/payment-list/accept/{id}', 'accept')->name('ux.payment.accept');

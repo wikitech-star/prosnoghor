@@ -50,7 +50,6 @@ class HandleInertiaRequests extends Middleware
             'siteSettings' => SiteSetting::first(),
             'appurl' => env('APP_URL'),
             'institute' => Institute::where('teacher_id', Auth::id())->first()
-
         ]);
     }
 }

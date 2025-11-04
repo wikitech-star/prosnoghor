@@ -15,12 +15,29 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $data = PaymentSession::with('user')
+            ->where('status', 'pending')
             ->filter($request->only('search'))
             ->latest()
             ->orderByRaw("FIELD(status, 'pending', 'unpaid', 'approved', 'rejected')")
             ->paginate(10);
 
         return Inertia::render('Backend/Payment/Index', [
+            'data' => $data,
+            'filters' => $request->only('search')
+        ]);
+    }
+
+    // history
+    public function history_view(Request $request)
+    {
+        $data = PaymentSession::with('user')
+            ->whereNot('status', 'pending')
+            ->filter($request->only('search'))
+            ->latest()
+            ->orderByRaw("FIELD(status, 'pending', 'unpaid', 'approved', 'rejected')")
+            ->paginate(10);
+
+        return Inertia::render('Backend/Payment/History', [
             'data' => $data,
             'filters' => $request->only('search')
         ]);
@@ -49,18 +66,20 @@ class PaymentController extends Controller
                 return redirect()->back()->with('error', 'কিছু একটা সমাস্যা হয়েছে।');
             }
 
-            $package = json_decode($p->data)->package;
+            $package = json_decode($p->data);
 
             $sub = new SubscribePackage();
-            $sub->user_id = Auth::id();
+            $sub->user_id = $p->user_id;
             $sub->days = $package->days;
-            $sub->classes = json_encode($package->cls);
-            $sub->subject = json_encode($package->suj);
+            $sub->classes = $package->cls;
+            $sub->subject = $package->suj;
             $sub->save();
 
-            PaymentSession::find($id)->delete();
+            $hist =  PaymentSession::find($id);
+            $hist->status = 'approved';
+            $hist->save();
 
-            return redirect()->back()->with('success', 'পেমেন্ট বাতিল করা হয়ছে।');
+            return redirect()->back()->with('success', 'পেমেন্ট গ্রহন করা হয়ছে।');
         } catch (\Exception $th) {
             return redirect()->back()->with('error', 'সার্ভার সমাস্যা আবার চেষ্টা করুন.' . env('APP_ENV') == 'local' ?? $th->getMessage());
         }

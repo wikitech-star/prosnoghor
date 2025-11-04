@@ -9,7 +9,9 @@ use App\Models\Lassion;
 use App\Models\Subject;
 use App\Models\QuestionPaper;
 use App\Models\Questions;
+use App\Models\SubscribePackage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -33,10 +35,42 @@ class QuestionsController extends Controller
             ->whereIn('subject_id', $subjects_ides)
             ->select('name', 'class_id', 'subject_id', 'id')->get();
 
+        // subscribe
+        $subscripe = SubscribePackage::where('user_id', Auth::id())
+            ->get()
+            ->filter(function ($item) {
+                $diffInDays = $item->created_at->diffInDays(Carbon::now());
+                return $diffInDays <= $item->days;
+            });
+
+        $allClasses = [];
+        $allSubjects = [];
+
+        foreach ($subscripe as $item) {
+            // প্রথম decode
+            $itemClasses = json_decode($item->classes, true);
+            $itemSubjects = json_decode($item->subject, true);
+
+            // merge
+            $allClasses = array_merge($allClasses, $itemClasses);
+            $allSubjects = array_merge($allSubjects, $itemSubjects);
+        }
+
+        // unique + reindex
+        $uniqueClasses = array_values(array_unique($allClasses));
+        $uniqueSubjects = array_values(array_unique($allSubjects));
+
+        // ✅ final JSON format
+        $subscriprs = [
+            'class' => $uniqueClasses,
+            'sub'   => $uniqueSubjects,
+        ];
+
         return Inertia::render('Shared/Questions/Index', [
             'group_class' => $group_class,
             'subjects' => $subjects,
             'lassion' => $lassion,
+            'subscriprs' => $subscriprs
         ]);
     }
 

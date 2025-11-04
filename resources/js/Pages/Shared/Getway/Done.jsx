@@ -5,9 +5,9 @@ import { ENGLISH_DATE_TO_BANGLA, ENGLISH_TO_BANGLA } from "../../../Utils/Helper
 
 function Done({ data }) {
     return (
-        <div class="safearea justify-center">
-            <div class="w-full md:w-[400px]">
-                <div class="w-full mx-auto flex flex-col items-center border border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.02)] rounded-box p-6">
+        <div className="safearea justify-center">
+            <div className="w-full md:w-[400px]">
+                <div className="w-full mx-auto flex flex-col items-center border border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.02)] rounded-box p-6">
                     <img src="/static/predone.svg" className="w-15 h-15" />
                     <h1 className="mt-5 text-success font-bold text-2xl text-center">
                         পেমেন্ট সফল হয়েছে

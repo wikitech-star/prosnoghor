@@ -167,7 +167,7 @@ export default function Add({ group_class, subjects, update }) {
                                     type="checkbox"
                                     id={key}
                                     value={key}
-                                    checked={qFrom.data.class_id?.includes(key)}
+                                    checked={qFrom.data.class_id?.includes(Number(key))}
                                     onChange={(e) => {
                                         const selectedSubjects =
                                             qFrom.data.class_id || [];
@@ -175,13 +175,13 @@ export default function Add({ group_class, subjects, update }) {
                                         if (e.target.checked) {
                                             qFrom.setData("class_id", [
                                                 ...selectedSubjects,
-                                                key,
+                                                Number(key),
                                             ]);
                                         } else {
                                             qFrom.setData(
                                                 "class_id",
                                                 selectedSubjects.filter(
-                                                    (id) => id !== key
+                                                    (id) => id !== Number(key)
                                                 )
                                             );
                                         }
@@ -224,7 +224,7 @@ export default function Add({ group_class, subjects, update }) {
                         subjects
                             .filter((sub) =>
                                 qFrom.data.class_id.includes(
-                                    String(sub.class_id)
+                                    Number(sub.class_id)
                                 )
                             )
                             .map((val, i) => (

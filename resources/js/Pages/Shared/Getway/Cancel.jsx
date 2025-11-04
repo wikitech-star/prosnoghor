@@ -4,9 +4,9 @@ import { Link } from "@inertiajs/react";
 
 function Cancel() {
     return (
-        <div class="safearea justify-center">
-            <div class="w-full md:w-[400px]">
-                <div class="w-full mx-auto flex flex-col items-center border border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.02)] rounded-box p-6">
+        <div className="safearea justify-center">
+            <div className="w-full md:w-[400px]">
+                <div className="w-full mx-auto flex flex-col items-center border border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.02)] rounded-box p-6">
                     <img
                         src="/static/payment_cancel.svg"
                         className="w-15 h-15"

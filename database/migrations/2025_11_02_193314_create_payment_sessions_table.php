@@ -23,6 +23,10 @@ return new class extends Migration
             $table->enum('status', ['unpaid', 'pending', 'approved', 'rejected'])->default('unpaid');
             $table->json('data')->nullable();
 
+            $table->enum('type', ['package', 'seet']);
+            $table->string('package_name')->nullable();
+            $table->string('seet_name')->nullable();
+
             $table->string('phone')->nullable();
             $table->string('tex')->nullable();
 

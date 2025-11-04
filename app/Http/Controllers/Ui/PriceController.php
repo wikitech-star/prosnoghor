@@ -105,17 +105,19 @@ class PriceController extends Controller
                 }
             }
 
+            $packageData = [
+                'cls' => $package->classes,
+                'suj' => $package->subjects,
+                'days' => $package->days
+            ];
+
             $p = new PaymentSession();
             $p->user_id = Auth::id();
             $p->method = $request->getway;
             $p->amount = $finalPrice;
-            $p->data = json_encode([
-                'package' => [
-                    'cls' => $package->classes,
-                    'suj' => $package->subjects,
-                    'days' => $package->days
-                ]
-            ]);
+            $p->data = json_encode($packageData);
+            $p->type = 'package';
+            $p->package_name = $package->title;
             $p->save();
 
             if ($request->cupon) {

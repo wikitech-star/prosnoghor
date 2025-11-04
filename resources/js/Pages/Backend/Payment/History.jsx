@@ -8,7 +8,7 @@ import {
     ENGLISH_DATE_TO_BANGLA,
 } from "../../../Utils/Helper";
 
-export default function Index({ data, filters }) {
+export default function History({ data, filters }) {
     // search
     const [search, setSearch] = useState(filters.search ?? "");
     const isFirstRender = useRef(true);
@@ -142,51 +142,6 @@ export default function Index({ data, filters }) {
                                     </td>
                                     <td>
                                         <div className="flex items-center gap-2">
-                                            {item?.status == "pending" && (
-                                                <>
-                                                    <button
-                                                        onClick={() =>
-                                                            confirm(
-                                                                "আপনি কি নিশ্চিত পেমেন্ট এর সকল তথ্য সঠিক?"
-                                                            ) &&
-                                                            router.get(
-                                                                route(
-                                                                    "ux.payment.accept",
-                                                                    {
-                                                                        id: item.id,
-                                                                    }
-                                                                )
-                                                            )
-                                                        }
-                                                        className="btn btn-xs btn-info"
-                                                    >
-                                                        <Check size={12} />
-                                                        গ্রহন করুন
-                                                    </button>
-                                                    {item?.status !==
-                                                        "rejected" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                confirm(
-                                                                    "আপনি কি নিশ্চিত পেমেন্ট বাতিল করতে চান?"
-                                                                ) &&
-                                                                router.get(
-                                                                    route(
-                                                                        "ux.payment.cancel",
-                                                                        {
-                                                                            id: item.id,
-                                                                        }
-                                                                    )
-                                                                )
-                                                            }
-                                                            className="btn btn-xs btn-error"
-                                                        >
-                                                            <X size={12} />
-                                                            বাতিল করুন
-                                                        </button>
-                                                    )}
-                                                </>
-                                            )}
                                             <button
                                                 onClick={() =>
                                                     confirm(
@@ -217,7 +172,7 @@ export default function Index({ data, filters }) {
             {/* pagination */}
             <Paginations data={data} />
 
-            <Header title="সকল পেমেন্ট রিকুয়েষ্ট" />
+            <Header title="সকল লেনদেন তালিকা" />
         </div>
     );
 }
