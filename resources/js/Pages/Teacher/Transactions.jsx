@@ -65,6 +65,7 @@ export default function Transactions({ data, filters }) {
                                 <th>লেনদেন আইডি</th>
                                 <th>পরিমান</th>
                                 <th>পেমেন্ট সিস্টেম</th>
+                                <th>পেমেন্ট কারণ</th>
                                 <th>অবস্থা</th>
                                 <th>পেমেন্ট তথ্য</th>
                                 <th>পেমেন্ট করেছেন</th>
@@ -86,6 +87,13 @@ export default function Transactions({ data, filters }) {
                                         </span>
                                     </td>
                                     <td>
+                                        <div className="badge badge-info">
+                                            {item?.type == "package"
+                                                ? "প্যাকেজ"
+                                                : "সিট"}
+                                        </div>
+                                    </td>
+                                    <td>
                                         <span
                                             className={`uppercase text-xs font-bold py-1 px-2 ${
                                                 item?.status === "pending"
@@ -102,18 +110,12 @@ export default function Transactions({ data, filters }) {
                                         </span>
                                     </td>
                                     <td>
-                                        {item.status == "pending" && (
-                                            <>
-                                                <p className="font-semibold text-neutral">
-                                                    <span>ফোনঃ</span>{" "}
-                                                    {item?.phone}
-                                                </p>
-                                                <p className="font-semibold text-neutral">
-                                                    <span>TRX:</span>{" "}
-                                                    {item?.tex}
-                                                </p>
-                                            </>
-                                        )}
+                                        <p className="font-semibold text-neutral">
+                                            <span>ফোনঃ</span> {item?.phone}
+                                        </p>
+                                        <p className="font-semibold text-neutral">
+                                            <span>TRX:</span> {item?.tex}
+                                        </p>
                                     </td>
                                     <td>
                                         {ENGLISH_DATE_TO_BANGLA(
