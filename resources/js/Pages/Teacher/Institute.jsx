@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ENGLISH_DATE_TO_BANGLA } from "../../Utils/Helper";
-import { useForm, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import Image from "../../Components/Parts/Image";
 import Model from "../../Components/Parts/Model";
 import Input from "../../Components/Parts/Input";
 import Textarea from "../../Components/Parts/Textarea";
 import Header from "../../Components/Parts/Header";
-import { Edit, X } from "lucide-react";
+import { Edit, HelpCircle, X } from "lucide-react";
 
 export default function Institute() {
     const { institute, auth } = usePage().props;
@@ -287,6 +287,7 @@ export default function Institute() {
                             <X size={14}/>
                         </div>
                         <p className="mt-3 text-center text-sm text-neutral">৩০ দিনের মধ্যে আপনার প্রতিষ্ঠানের নাম পরিবর্তন হয়েছে। আপনার যদি পরিবর্তন করতে হয়ছে সরাসরি এডমিন এর সাথে যোগাযোগ করুন</p>
+                    <Link href={route('ui.contact.index')} className="btn btn-xs btn-success mt-3"><HelpCircle size={10}/> যোগাযোগ করুন</Link>
                     </div>
                 )}
             </Model>

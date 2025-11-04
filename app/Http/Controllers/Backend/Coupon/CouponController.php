@@ -111,10 +111,12 @@ class CouponController extends Controller
                 }
             }
 
-            if ($coupon->total_usages >= $coupon->usages) {
-                return response()->json([
-                    'error' => 'এই কুপনটির ব্যাবহার পরিমান শেষ।'
-                ], 400);
+            if ($coupon->usages) {
+                if ($coupon->total_usages >= $coupon->usages) {
+                    return response()->json([
+                        'error' => 'এই কুপনটির ব্যাবহার পরিমান শেষ।'
+                    ], 400);
+                }
             }
 
             return response()->json($coupon);

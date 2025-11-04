@@ -242,7 +242,7 @@ function PriceCheckout({ data }) {
                     </button>
                 </div>
 
-                <Link>
+                <Link href={route('ui.contact.index')}>
                     <p className="text-center text-gray-600 w-full text-sm font-medium mb-4 duration-300 hover:underline hover:text-neutral">
                         যে কোন সমাস্যার সমাধান এর জন্য যোগাযোগ করুন।
                     </p>

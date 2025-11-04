@@ -10,19 +10,14 @@ const SITE_MENU = [
         active: ["price.list"],
     },
     {
-        name: "সকল ক্লাস",
-        url: route("home"),
-        active: ["home"],
-    },
-    {
         name: "লেকচার শিট",
         url: route("home"),
         active: ["home"],
     },
     {
         name: "যোগাযোগ",
-        url: route("home"),
-        active: ["home"],
+        url: route("ui.contact.index"),
+        active: ["ui.contact.index"],
     },
 ];
 export { SITE_MENU };
