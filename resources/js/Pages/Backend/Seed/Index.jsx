@@ -102,7 +102,9 @@ export default function Index({ data, filters }) {
                                         <div>
                                             <p>{item.title}</p>
                                             <Link
-                                                href={""}
+                                                href={route("ui.seet.view", {
+                                                    slug: item?.slug,
+                                                })}
                                                 className="text-xs flex items-center gap-1 underline text-neutral font-bold"
                                             >
                                                 <Link2Icon size={15} />{" "}
@@ -119,10 +121,14 @@ export default function Index({ data, filters }) {
                                     </td>
                                     <td>
                                         {ENGLISH_TO_BANGLA(item.total_view) ||
-                                            "0"} জন
+                                            "0"}{" "}
+                                        জন
                                     </td>
-                                    <td>{ENGLISH_TO_BANGLA(item.total_sales) ||
-                                            "0"} পিস</td>
+                                    <td>
+                                        {ENGLISH_TO_BANGLA(item.total_sales) ||
+                                            "0"}{" "}
+                                        পিস
+                                    </td>
                                     <td>
                                         <p>
                                             <strong>তৈরি করেছেনঃ</strong>{" "}
@@ -153,10 +159,9 @@ export default function Index({ data, filters }) {
                                                         "আপনি কি নিশ্চিত সিটটি মুছে ফেলতেচান?"
                                                     ) &&
                                                     router.get(
-                                                        route(
-                                                            "ux.seed.del",
-                                                            { id: item.id }
-                                                        )
+                                                        route("ux.seed.del", {
+                                                            id: item.id,
+                                                        })
                                                     )
                                                 }
                                                 className="btn btn-xs btn-error btn-circle"

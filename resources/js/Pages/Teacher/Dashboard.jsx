@@ -30,7 +30,7 @@ export default function Dashboard({
                             >
                                 <img
                                     src={`/uploads/${val.image}`}
-                                    className="w-full object-cover h-[350px]"
+                                    className="w-full object-contain h-[350px]"
                                 />
 
                                 <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
