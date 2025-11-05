@@ -1,5 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 import { ArrowLeftRight, ArrowRight } from "lucide-react";
+import Logo from "../Parts/Logo";
 import React from "react";
 
 export default function Footer() {
@@ -26,10 +27,7 @@ export default function Footer() {
 
                 <div class="grid grid-cols-1 md:grid-col-3 lg:grid-cols-5 pt-15 gap-10">
                     <div class="col-span-2">
-                        <img
-                            class="h-[30px] w-auto"
-                            src="https://paperlessedu.com/media/placeholder_images.jpg"
-                        />{" "}
+                        <Logo />{" "}
                         <p class="text-white mt-4 text-base">
                             একটি নিরাপদ ও সহজ {appName} অনলাইন পরীক্ষা
                             প্ল্যাটফর্ম, শিক্ষার্থী ও শিক্ষকদের জন্য দ্রুত ও

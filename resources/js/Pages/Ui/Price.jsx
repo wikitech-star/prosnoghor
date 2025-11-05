@@ -25,7 +25,7 @@ function Price({ data }) {
             </div>
 
             {/* prices */}
-            <div className="mt-10 container">
+            <div className="mt-10 container pb-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-content-center gap-3">
                     {data.map((val, i) => (
                         <div
