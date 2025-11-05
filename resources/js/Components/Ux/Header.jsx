@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "../Parts/Image";
 import { Globe, Lock, PowerOff, SidebarOpen, User } from "lucide-react";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 
 export default function Header({ sidebarOpen, setSidebarOpen }) {
+    const { auth } = usePage().props;
     return (
         <div className="bg-white min-h-[70px] flex-between px-5 shadow w-full sticky top-0 z-50 print:hidden">
             <button
@@ -22,7 +23,13 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
                 <div className="dropdown dropdown-bottom dropdown-end">
                     <div className="avatar" tabIndex={0} role="button">
                         <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-2">
-                            <Image />
+                            <Image
+                                path={
+                                    auth?.avatar
+                                        ? "/uploads/" + auth?.avatar
+                                        : ""
+                                }
+                            />
                         </div>
                     </div>
                     <ul
@@ -30,13 +37,13 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
                         className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
                     >
                         <li>
-                            <Link>
+                            <Link href={route("g.account.index")}>
                                 <User size={15} className="mr-1" />
                                 প্রোফাইল
                             </Link>
                         </li>
                         <li>
-                            <Link>
+                            <Link href={route("g.security.index")}>
                                 <Lock size={15} className="mr-1" />
                                 সিকিউরিটি
                             </Link>
@@ -45,7 +52,7 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
                             <button
                                 onClick={() =>
                                     confirm("আপনি নিশ্চিত?") &&
-                                    router.get(route('logout'))
+                                    router.get(route("logout"))
                                 }
                                 as="button"
                             >
