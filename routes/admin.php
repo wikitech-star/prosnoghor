@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\Ad\AdController;
 use App\Http\Controllers\Backend\Contact\ContactController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\InstituteRequestController;
@@ -98,6 +99,13 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
         Route::get('/seed-add', 'add_view')->name('ux.seed.add');
         Route::post('/seed-add', 'store')->name('ux.seed.post');
         Route::get('/seed-del/{id}', 'delete')->name('ux.seed.del');
+    });
+
+    // ad
+    Route::controller(AdController::class)->group(function () {
+        Route::get('/ad-list', 'index')->name('ux.ad.list');
+        Route::post('/ad-list', 'store')->name('ux.ad.post');
+        Route::get('/ad-del/{id}', 'delete')->name('ux.ad.del');
     });
 
     // setting routes

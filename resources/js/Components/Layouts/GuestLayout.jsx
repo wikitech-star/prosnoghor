@@ -13,7 +13,7 @@ export default function GuestLayout({
         <Global className="bg-gray-50 min-h-screen h-auto" title={title} description={description} keyword={keyword}>
             <div>
                 <Navbar />
-                <div className=" w-full h-auto">{children}</div>
+                <div className="w-full h-auto">{children}</div>
             </div>
         </Global>
     );
