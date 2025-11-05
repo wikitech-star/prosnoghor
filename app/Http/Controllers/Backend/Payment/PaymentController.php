@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentSession;
+use App\Models\SeedBuyed;
 use App\Models\SubscribePackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,12 +69,20 @@ class PaymentController extends Controller
 
             $package = json_decode($p->data);
 
-            $sub = new SubscribePackage();
-            $sub->user_id = $p->user_id;
-            $sub->days = $package->days;
-            $sub->classes = $package->cls;
-            $sub->subject = $package->suj;
-            $sub->save();
+            if ($p->type == 'package') {
+                $sub = new SubscribePackage();
+                $sub->user_id = $p->user_id;
+                $sub->days = $package->days;
+                $sub->classes = $package->cls;
+                $sub->subject = $package->suj;
+                $sub->save();
+            } else {
+                $se = new SeedBuyed();
+                $se->user_id = $p->user_id;
+                $se->title = $p->package_name;
+                $se->seed_id = $package->id;
+                $se->save();
+            }
 
             $hist =  PaymentSession::find($id);
             $hist->status = 'approved';

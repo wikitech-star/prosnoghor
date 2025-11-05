@@ -63,8 +63,7 @@ class SeedController extends Controller
             $finalPrice = $originalPrice;
 
             $seedData = [
-                'title' => $package->title,
-                'file' => $package->files,
+                'id' => $package->id,
             ];
 
             $p = new PaymentSession();

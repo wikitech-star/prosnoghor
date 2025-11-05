@@ -131,6 +131,11 @@ function Index({ data }) {
                         >
                             বাতিল করুন
                         </Link>
+                        <Link href={route("ui.contact.index")}>
+                            <p className="text-center max-w-[80%] mx-auto text-gray-600 w-full text-sm font-medium mt-3 duration-300 hover:underline hover:text-neutral">
+                                যে কোন সমাস্যার সমাধান এর জন্য যোগাযোগ করুন।
+                            </p>
+                        </Link>
                     </div>
                 </div>
             </div>
