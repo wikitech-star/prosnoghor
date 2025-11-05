@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('days');
             $table->json('classes');
             $table->json('subject');
+            $table->unsignedBigInteger('package_id')->nullable();
             $table->timestamps();
         });
     }

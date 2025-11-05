@@ -88,7 +88,8 @@ class PriceController extends Controller
             $packageData = [
                 'cls' => $package->classes,
                 'suj' => $package->subjects,
-                'days' => $package->days
+                'days' => $package->days,
+                'id' => $package->id
             ];
 
             $p = new PaymentSession();

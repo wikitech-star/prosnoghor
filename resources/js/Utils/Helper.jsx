@@ -119,9 +119,69 @@ const DAYS_TO_BANGLA_DURATION = (days) => {
     let parts = [];
     if (years > 0) parts.push(`${ENGLISH_TO_BANGLA(years)} বছর`);
     if (months > 0) parts.push(`${ENGLISH_TO_BANGLA(months)} মাস`);
-    if (remainingDays > 0) parts.push(`${ENGLISH_TO_BANGLA(remainingDays)} দিন`);
+    if (remainingDays > 0)
+        parts.push(`${ENGLISH_TO_BANGLA(remainingDays)} দিন`);
 
     return parts.length > 0 ? parts.join(" ") : "০ দিন";
 };
 
-export { ENGLISH_TO_BANGLA, ENGLISH_DATE_TO_BANGLA, BANGLA_INDEX,DAYS_TO_BANGLA_DURATION };
+// ago
+function BANGLA_TIME_AGO(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now - date) / 1000); // difference in seconds
+
+    const units = [
+        { name: "বছর", seconds: 31536000 },
+        { name: "মাস", seconds: 2592000 },
+        { name: "দিন", seconds: 86400 },
+        { name: "ঘন্টা", seconds: 3600 },
+        { name: "মিনিট", seconds: 60 },
+        { name: "সেকেন্ড", seconds: 1 },
+    ];
+
+    for (let unit of units) {
+        const interval = Math.floor(diff / unit.seconds);
+        if (interval >= 1) {
+            return `${toBanglaNumber(interval)} ${unit.name} আগে`;
+        }
+    }
+
+    return "এইমাত্র";
+}
+
+// days lest
+function BANGLA_DAY_LEFT(createdAt, totalDays) {
+    const createdDate = new Date(createdAt);
+    const now = new Date();
+
+    // কত দিন পেরিয়েছে
+    const diffTime = now - createdDate;
+    const passedDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    // কত দিন বাকি আছে
+    const remaining = totalDays - passedDays;
+
+    if (remaining > 0) {
+        return `${toBanglaNumber(remaining)} দিন বাকি আছে`;
+    } else if (remaining === 0) {
+        return "আজ শেষ দিন";
+    } else {
+        return false;
+    }
+}
+
+// English → Bangla number convert helper
+function toBanglaNumber(num) {
+    const banglaDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+    return num.toString().replace(/\d/g, (d) => banglaDigits[d]);
+}
+
+export {
+    ENGLISH_TO_BANGLA,
+    ENGLISH_DATE_TO_BANGLA,
+    BANGLA_INDEX,
+    DAYS_TO_BANGLA_DURATION,
+    BANGLA_TIME_AGO,
+    BANGLA_DAY_LEFT,
+};

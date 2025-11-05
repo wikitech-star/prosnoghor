@@ -132,7 +132,7 @@ export default function Transactions({ data, filters }) {
             {/* pagination */}
             <Paginations data={data} />
 
-            <Header title="সকল পেমেন্ট রিকুয়েষ্ট" />
+            <Header title="সকল লেনদেন" />
         </div>
     );
 }

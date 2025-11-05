@@ -250,8 +250,8 @@ const ADMIN_SIDEBAR = [
     {
         name: "একটিভ প্যাকেজ",
         icon: Package2Icon,
-        link: route("tech.transactions.list"),
-        active: ["tech.transactions.list"],
+        link: route("tech.packages.list"),
+        active: ["tech.packages.list"],
         role: ["teacher"],
         pro: false,
     },

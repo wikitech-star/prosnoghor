@@ -119,7 +119,7 @@ export default function Seed({ data, filters }) {
             {/* pagination */}
             <Paginations data={data} />
 
-            <Header title="সকল মতব্যর তালিকা" />
+            <Header title="সকল সিট" />
         </div>
     );
 }

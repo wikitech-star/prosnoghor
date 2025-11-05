@@ -75,6 +75,8 @@ class PaymentController extends Controller
                 $sub->days = $package->days;
                 $sub->classes = $package->cls;
                 $sub->subject = $package->suj;
+                $sub->subject = $package->suj;
+                $sub->package_id = $package->id;
                 $sub->save();
             } else {
                 $se = new SeedBuyed();

@@ -4,10 +4,11 @@ import Input from "../../../Components/Parts/Input";
 import Select from "../../../Components/Parts/Select";
 import Model from "../../../Components/Parts/Model";
 import { ENGLISH_TO_BANGLA } from "../../../Utils/Helper";
-import { Link, router, useForm } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { ArrowRight, Expand, Lock, Ribbon } from "lucide-react";
 
 export default function Index({ group_class, subjects, lassion, subscriprs }) {
+    const { auth } = usePage().props;
     // subcribe
     const [subsClasses, setSubsClasses] = useState([]);
     const [subsSubjects, setSubsSubjects] = useState([]);
@@ -47,15 +48,18 @@ export default function Index({ group_class, subjects, lassion, subscriprs }) {
     const [classJson, setClassJson] = useState({});
     useEffect(() => {
         if (!group_class || !subsClasses) return;
-
-        const filtered = Object.entries(group_class)
-            .filter(([key]) => subsClasses.includes(Number(key)))
-            .reduce((acc, [key, value]) => {
-                acc[key] = value;
-                return acc;
-            }, {});
-
-        setClassJson(filtered);
+        if (auth.role == "admin" || auth.role == "editor") {
+            setPlanMode(true);
+            setClassJson(group_class);
+        } else {
+            const filtered = Object.entries(group_class)
+                .filter(([key]) => subsClasses.includes(Number(key)))
+                .reduce((acc, [key, value]) => {
+                    acc[key] = value;
+                    return acc;
+                }, {});
+            setClassJson(filtered);
+        }
     }, [group_class, subsClasses]);
 
     // create questionForm
@@ -232,7 +236,49 @@ export default function Index({ group_class, subjects, lassion, subscriprs }) {
                                     htmlFor={i}
                                     className="w-full px-3 py-1.5 border border-gray-200 rounded-box flex items-center gap-3 duration-300 hover:bg-gray-100"
                                 >
-                                    {subsSubjects.includes(Number(val.id)) ? (
+                                    {auth.role === "teacher" ? (
+                                        subsSubjects.includes(
+                                            Number(val.id)
+                                        ) ? (
+                                            <input
+                                                type="checkbox"
+                                                id={i}
+                                                value={val.id}
+                                                checked={qFrom.data.subjects?.includes(
+                                                    val.id
+                                                )}
+                                                onChange={(e) => {
+                                                    const selectedSubjects =
+                                                        qFrom.data.subjects ||
+                                                        [];
+
+                                                    if (e.target.checked) {
+                                                        qFrom.setData(
+                                                            "subjects",
+                                                            [
+                                                                ...selectedSubjects,
+                                                                val.id,
+                                                            ]
+                                                        );
+                                                    } else {
+                                                        qFrom.setData(
+                                                            "subjects",
+                                                            selectedSubjects.filter(
+                                                                (id) =>
+                                                                    id !==
+                                                                    val.id
+                                                            )
+                                                        );
+                                                    }
+                                                }}
+                                                className="checkbox"
+                                            />
+                                        ) : (
+                                            <div>
+                                                <Lock size={14} />
+                                            </div>
+                                        )
+                                    ) : (
                                         <input
                                             type="checkbox"
                                             id={i}
@@ -261,10 +307,6 @@ export default function Index({ group_class, subjects, lassion, subscriprs }) {
                                             }}
                                             className="checkbox"
                                         />
-                                    ) : (
-                                        <div>
-                                            <Lock size={14} />
-                                        </div>
                                     )}
                                     <span>{val?.name}</span>
                                 </label>
