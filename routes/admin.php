@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Backend\Contact\ContactController;
-use App\Http\Controllers\Backend\Coupon\CouponController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\InstituteRequestController;
 use App\Http\Controllers\Backend\Package\PackageController;
@@ -75,16 +74,6 @@ Route::middleware(['auth', 'hasNoRole', 'role:admin'])->prefix('app')->group(fun
         Route::get('/package-add', 'add_view')->name('ux.package.add');
         Route::post('/package-add', 'store')->name('ux.package.post');
         Route::get('/package/{id}', 'delete')->name('ux.package.del');
-    });
-
-    // cupon
-    Route::controller(CouponController::class)->group(function () {
-        Route::get('/cupon-list', 'index')->name('ux.cupon.list');
-        Route::get('/cupon-add', 'add_view')->name('ux.cupon.add');
-        Route::post('/cupon-add', 'store')->name('ux.cupon.post');
-        Route::get('/cupon-del/{id}', 'delete')->name('ux.cupon.del');
-
-        Route::post('/get-cupon', 'getCupon')->name('ux.cupon.get');
     });
 
     // payment

@@ -3,13 +3,10 @@ import GuestLayout from "../../Components/Layouts/GuestLayout";
 import Input from "../../Components/Parts/Input";
 import { DAYS_TO_BANGLA_DURATION, ENGLISH_TO_BANGLA } from "../../Utils/Helper";
 import { Link, useForm } from "@inertiajs/react";
-import axios from "axios";
-import toast from "react-hot-toast";
 
 function PriceCheckout({ data }) {
     const pForm = useForm({
         id: data?.package_id,
-        cupon: "",
         getway: "",
     });
 
@@ -21,47 +18,6 @@ function PriceCheckout({ data }) {
         });
     };
 
-    // cupon
-    const [cupon, setCupon] = useState("");
-    const [DiscountedPrice, setDiscountedPrice] = useState(
-        data?.selling_price || 0
-    );
-    const handleCuponCode = () => {
-        axios
-            .post(route("ux.cupon.get"), {
-                code: cupon,
-                package: data?.package_id,
-            })
-            .then((res) => {
-                const coupon = res.data;
-
-                // ধরো তোমার মূল দাম
-                const originalPrice = data?.selling_price;
-
-                let finalPrice = originalPrice;
-
-                // ডিসকাউন্ট হিসাব
-                if (coupon.type === "p") {
-                    // percentage
-                    finalPrice =
-                        originalPrice - (originalPrice * coupon.value) / 100;
-                } else if (coupon.type === "t") {
-                    // fixed amount
-                    finalPrice = originalPrice - coupon.value;
-                }
-
-                // negative না হওয়ার জন্য
-                if (finalPrice < 0) finalPrice = 0;
-
-                // এখন state এ রাখতে পারো
-                setDiscountedPrice(finalPrice);
-                toast.success("কুপন প্রয়োগ সফল হয়েছে।");
-                pForm.setData("cupon", coupon.code);
-            })
-            .catch((error) => {
-                toast.error(error.response?.data?.error || error.message);
-            });
-    };
     return (
         <div className="pb-5">
             <div className="bg-white shadow-[0_0_100px_rgba(0,0,0,0.03)]  mt-10 border border-primary/30 rounded-box max-w-xl mx-auto">
@@ -136,47 +92,16 @@ function PriceCheckout({ data }) {
                                     টাকা
                                 </p>
                             </div>
-                            <div className="flex items-center justify-between text-sm font-normal text-neutral">
-                                <p>ডিসকাউন্টঃ-</p>
-                                <p>
-                                    {ENGLISH_TO_BANGLA(
-                                        DiscountedPrice
-                                            ? Number(
-                                                  data?.selling_price -
-                                                      DiscountedPrice
-                                              ).toFixed(2)
-                                            : data?.selling_price
-                                    )}{" "}
-                                    টাকা
-                                </p>
-                            </div>
                             <hr className="border my-2 border-dashed border-neutral" />
                             <div className="flex items-center justify-between text-sm font-bold text-neutral">
                                 <p>সর্বমোট মূল্যঃ-</p>
-                                <p>{ENGLISH_TO_BANGLA(DiscountedPrice)} টাকা</p>
+                                <p>{ENGLISH_TO_BANGLA(data?.selling_price)} টাকা</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="px-9 py-5 space-y-3 border-t border-dashed border-gray-300">
-                    <div className="flex items-center justify-between gap-3">
-                        <Input
-                            type="text"
-                            value={cupon}
-                            onChange={(e) => setCupon(e.target.value)}
-                            className="w-full"
-                            placeholder="কুপন কোড"
-                        />
-                        <button
-                            onClick={handleCuponCode}
-                            disabled={cupon == ""}
-                            className="btn btn-info"
-                        >
-                            প্রয়োগ করুন
-                        </button>
-                    </div>
-
                     {/* get way */}
                     <div className="grid grid-cols-2 gap-3">
                         <button
@@ -238,11 +163,11 @@ function PriceCheckout({ data }) {
                         disabled={pForm.processing}
                         className="btn btn-primary w-full"
                     >
-                        পেমেন্ট করুন {ENGLISH_TO_BANGLA(DiscountedPrice)} টাকা
+                        পেমেন্ট করুন {ENGLISH_TO_BANGLA(data?.selling_price)} টাকা
                     </button>
                 </div>
 
-                <Link href={route('ui.contact.index')}>
+                <Link href={route("ui.contact.index")}>
                     <p className="text-center text-gray-600 w-full text-sm font-medium mb-4 duration-300 hover:underline hover:text-neutral">
                         যে কোন সমাস্যার সমাধান এর জন্য যোগাযোগ করুন।
                     </p>

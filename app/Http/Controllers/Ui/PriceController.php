@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Ui;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coupon;
 use App\Models\PaymentSession;
 use App\Models\Pckage;
 use Illuminate\Http\Request;
@@ -85,25 +84,6 @@ class PriceController extends Controller
             // মূল দাম
             $originalPrice = $package->selling_price;
             $finalPrice = $originalPrice;
-            if ($request->cupon) {
-                $coupon = Coupon::where('code', $request->cupon)->first();
-                if (!$coupon) {
-                    return redirect()->back()->with('error', 'কুপন কোড সঠিক নয়।');
-                }
-                // ডিসকাউন্ট হিসাব
-                if ($coupon->type === 'p') {
-                    // percentage discount
-                    $finalPrice = $originalPrice - ($originalPrice * $coupon->value) / 100;
-                } elseif ($coupon->type === 't') {
-                    // fixed discount
-                    $finalPrice = $originalPrice - $coupon->value;
-                }
-
-                // Negative দাম প্রতিরোধ
-                if ($finalPrice < 0) {
-                    $finalPrice = 0;
-                }
-            }
 
             $packageData = [
                 'cls' => $package->classes,
@@ -119,12 +99,6 @@ class PriceController extends Controller
             $p->type = 'package';
             $p->package_name = $package->title;
             $p->save();
-
-            if ($request->cupon) {
-                $coupon = Coupon::where('code', $request->cupon)->first();
-                $coupon->total_usages = ($coupon->total_usages + 1);
-                $coupon->save();
-            }
 
             return redirect()->route('g.payment.index', ['id' => $p->uid]);
         } catch (\Exception $th) {

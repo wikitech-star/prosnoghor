@@ -27,9 +27,13 @@ export default function Add({ update }) {
             const slug = seedFrom.data.title
                 .toLowerCase()
                 .trim()
-                .replace(/[^\w\s-]/g, "") // remove special chars
-                .replace(/\s+/g, "-") // replace spaces with dashes
-                .replace(/--+/g, "-"); // collapse multiple dashes
+                // বাংলা (অথবা যেকোন ইউনিকোড) অক্ষর রাখতে
+                .replace(/[^\p{L}\p{N}\s-]/gu, "")
+                // ফাঁকা জায়গা (-) এ রূপান্তর
+                .replace(/\s+/g, "-")
+                // একাধিক ড্যাশ একসাথে থাকলে একটিতে নামিয়ে আনা
+                .replace(/-+/g, "-");
+
             seedFrom.setData("slug", slug);
         } else {
             seedFrom.setData("slug", "");
@@ -129,7 +133,11 @@ export default function Add({ update }) {
                         <small>ফিচার ইমেজ</small>
                         <FileInput
                             name="thumbnail"
-                            old={seedFrom.data.thumbnailOld ? '/uploads/'+seedFrom.data.thumbnailOld : ''}
+                            old={
+                                seedFrom.data.thumbnailOld
+                                    ? "/uploads/" + seedFrom.data.thumbnailOld
+                                    : ""
+                            }
                             error={seedFrom.errors.image}
                             accept="image/*"
                             onChange={(file) =>

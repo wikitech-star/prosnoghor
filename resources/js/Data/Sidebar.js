@@ -126,14 +126,6 @@ const ADMIN_SIDEBAR = [
         pro: false,
     },
     {
-        name: "কুপন",
-        icon: TicketPercent,
-        link: route("ux.cupon.list"),
-        active: ["ux.cupon.list", "ux.cupon.add"],
-        role: ["admin"],
-        pro: false,
-    },
-    {
         name: "পেমেন্ট রিকুয়েষ্ট",
         icon: CreditCard,
         link: route("ux.payment.index"),

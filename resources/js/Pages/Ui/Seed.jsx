@@ -10,7 +10,6 @@ function Seed({ data, filters }) {
     const [search, setSearch] = useState(filters.search || "");
     const isFirstRender = useRef(true);
     useEffect(() => {
-        
         if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
@@ -60,7 +59,11 @@ function Seed({ data, filters }) {
                                 </div>
                                 <div className="p-4 flex flex-col items-center justify-center border-t border-dashed border-gray-200 text-center">
                                     <div>
-                                        <Link href={""}>
+                                        <Link
+                                            href={route("ui.seet.view", {
+                                                slug: item?.slug,
+                                            })}
+                                        >
                                             <h1 className="text-base font-bold duration-300 hover:underline hover:text-primary text-center max-w-[80%] mx-auto">
                                                 {item?.title}
                                             </h1>

@@ -24,6 +24,8 @@ Route::controller(ContactController::class)->group(function () {
 });
 
 // seed
-Route::controller(SeedController::class)->group(function(){
+Route::controller(SeedController::class)->group(function () {
     Route::get('/seet-list', 'index')->name('ui.seet.index');
+    Route::get('/seet-view/{slug}', 'detailsView')->name('ui.seet.view');
+    Route::post('/seet-payment', 'create_payment')->name('ui.seet.post');
 });

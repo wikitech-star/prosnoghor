@@ -3,9 +3,14 @@ import Navbar from "../Ui/Navbar";
 import { Head, usePage } from "@inertiajs/react";
 import Global from "./Global";
 
-export default function GuestLayout({ title, children }) {
+export default function GuestLayout({
+    title,
+    keyword = "",
+    description = "",
+    children,
+}) {
     return (
-        <Global className='bg-gray-50 min-h-screen h-auto' title={title}>
+        <Global className="bg-gray-50 min-h-screen h-auto" title={title} description={description} keyword={keyword}>
             <div>
                 <Navbar />
                 <div className=" w-full h-auto">{children}</div>

@@ -8,6 +8,8 @@ import Textarea from "../Parts/Textarea";
 
 export default function Global({
     title,
+    keyword = "",
+    description = "",
     className = "max-h-screen",
     children,
 }) {
@@ -102,7 +104,7 @@ export default function Global({
 
     return (
         <div className="w-full">
-            <Header title={title} />
+            <Header title={title} description={description} keyword={keyword} />
             <div className={`${className}`}>{children}</div>
             <Toaster position="top-center" reverseOrder={false} />
 

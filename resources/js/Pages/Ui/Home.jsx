@@ -34,7 +34,10 @@ function Home() {
                             />
                             প্রশ্ন তৈরি করুন
                         </Link>
-                        <Link className="btn btn-sm btn-secondary group">
+                        <Link
+                            href={route("ui.seet.index")}
+                            className="btn btn-sm btn-secondary group"
+                        >
                             <Book
                                 size={13}
                                 className="duration-300 group-hover:mr-2"
