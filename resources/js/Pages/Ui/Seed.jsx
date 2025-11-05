@@ -85,9 +85,11 @@ function Seed({ data, filters }) {
                                             )}
                                         </h1>
                                     </div>
-                                    <button className="btn btn-primary btn-sm w-full">
+                                    <Link href={route("ui.seet.view", {
+                                                    slug: item?.slug,
+                                                })} className="btn btn-primary btn-sm w-full">
                                         <ShoppingBag size={14} /> ক্রয় করুন
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))
